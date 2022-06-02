@@ -80,22 +80,21 @@ def getClassId(className):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     c.execute(f"SELECT c.classId FROM Class as c WHERE c.className = ?", [className])
-    cId = c.fetchall()
+    cId = c.fetchall()[0][0]
     return cId
 
 def getStudentId(firstName, lastName):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     c.execute(f"SELECT s.studentId FROM Student as s WHERE s.firstName = ? AND s.lastName = ?", [firstName, lastName])
-    sId = c.fetchall()
+    sId = c.fetchone()
     return sId
 
 def getStudentClassId(studentId, classId):
     conn = sqlite3.connect(database)
     c = conn.cursor()
-    sql = f"SELECT sc.studentClassId FROM studentClass as sc WHERE sc.studentId = ? AND sc.classId = ?", [studentId, classId]
-    c.execute(sql)
-    scId = c.fetchall()
+    c.execute(f"SELECT sc.studentClassId FROM studentClass as sc WHERE sc.studentId = ? AND sc.classId = ?", [studentId, classId])
+    scId = c.fetchone()[0]
     return scId
 
 def insertNote(studentNote, studentClassId):
@@ -126,12 +125,16 @@ def getNote(studentClassId):
         note = i[0]
     return note
 
-        
-    
-    
-    
-    
-    
-    
+def getAssId(studentClassId):
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
+    c.execute(f"SELECT assessmentId FROM Mark WHERE studentClassId = ?", [studentClassId])
+    assId = c.fetchall()[0][0]
+    return assId
 
-    
+def getAssNo(assId):
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
+    c.execute(f"SELECT assessmentNum FROM Assessment WHERE assessmentId = ?", [assId])
+    assNo = c.fetchall()[0][0]
+    return assNo

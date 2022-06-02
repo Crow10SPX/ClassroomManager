@@ -4,9 +4,14 @@ from PyQt5 import QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-
+    
+    
 class ClassroomManager(QWidget):
     styles = {
+        "markButton":
+            "QPushButton{background-color : rgb(0, 128, 255); color : white; font-family : Arial;"
+            "border-style : outset; border-width : 2px; border-radius: 10px; padding: 6px; border-color : rgb(0, 128, 255);} QPushButton::hover { background-color : rgb(0, 221, 255);"
+            "border-color : rgb(0, 221, 255); color : white;} QPushButton::pressed {color : rgb(0, 221, 255);}",
         "titleText":
             "color: black; font: 18px;",
         "noteButton":
@@ -322,32 +327,72 @@ class ClassroomManager(QWidget):
         self.top_layout.setAlignment(self.classSizeLabel, Qt.AlignHCenter)
         self.top_layout.setAlignment(self.thisClassLabel, Qt.AlignHCenter)
         
-        #make assessment button
-        self.assessButton = QPushButton("Assessment")
-        self.assessButton.setFixedSize(120, 60)
-        self.assessButton.setStyleSheet(self.styles["genButton"])
-        self.assessButton.clicked.connect(self.stuTasksDialog)
-        self.top_layout.addWidget(self.assessButton)
-        self.top_layout.setAlignment(self.assessButton, Qt.AlignRight)
+        #make add/subtract assessment button
+        self. taskWidget = QWidget()
+        self.taskLayout = QHBoxLayout()
+        
+        self.addButton = QPushButton("Add")
+        self.addButton.setFixedSize(60, 60)
+        #self.addButton.clicked.connect()
+        self.addButton.setStyleSheet(self.styles["markButton"])
+        
+        
+        self.taskLayout.addWidget(self.addButton)
+        
+        
+        self.taskWidget.setLayout(self.taskLayout)
+        self.top_layout.addWidget(self.taskWidget)
+        
+        self.top_layout.setAlignment(self.taskWidget, Qt.AlignRight)
+        
         
         self.viewNotes = [None]*self.classSize
         self.behaviourNote = [None]*self.classSize
         self.saveNote = [None]*self.classSize
+        self.mark = [[None]*4]*self.classSize
+        self.markLabel = [[None]*4]*self.classSize
+        self.markvlayout = [[None]*4]*self.classSize
+        
+
         
         for i in range(0, self.classSize):
             groupBox = QGroupBox()
             
             groupBox.setTitle(f"Student: {self.students[i]}")
-
-            groupLayout = QHBoxLayout(groupBox)
+        
+            comboLayout = QVBoxLayout(groupBox)
+            
+            self.markLayout = QHBoxLayout()
+            
+            
+            for x in range(0, 4):
+                self.markvlayout[i][x] = QVBoxLayout()
+                self.markLabel[i][x] = QLabel()
+                self.markLabel[i][x].setText(f"Task: {x+1}")
+                self.mark[i][x] = QLineEdit()
+                self.mark[i][x].setFixedSize(60,40)
+                saveMark = QPushButton("Save Marks")
+                self.markvlayout[i][x].addWidget(self.markLabel[i][x])
+                self.markvlayout[i][x].addWidget(self.mark[i][x])
+                self.markvlayout[i][x].addItem(self.spacer4)
+                self.markLayout.addLayout(self.markvlayout[i][x])
+                self.markLayout.addItem(self.spacer1)
+             
+            saveMark = QPushButton("Save Marks")   
+            self.markLayout.addWidget(saveMark)
+            self.markLayout.setAlignment(saveMark, Qt.AlignRight)
+            self.markLayout.setAlignment(self.markvlayout[i][x], Qt.AlignLeft)      
+            comboLayout.addLayout(self.markLayout)
+            
+            behaviourLayout = QHBoxLayout()
 
             notePrompt = QLabel("Write a behaviour note:")
-            notePrompt.setStyleSheet("color: black; font: 22px;")
-            groupLayout.addWidget(notePrompt)
+            notePrompt.setStyleSheet("color: black; font: 25px;")
+            behaviourLayout.addWidget(notePrompt)
                         
             self.behaviourNote[i] = QTextEdit()
-            self.behaviourNote[i].setFixedSize(620, 160)
-            groupLayout.addWidget(self.behaviourNote[i])
+            self.behaviourNote[i].setFixedSize(1100, 200)
+            behaviourLayout.addWidget(self.behaviourNote[i])
 
             buttonLayout = QVBoxLayout()
             
@@ -367,13 +412,16 @@ class ClassroomManager(QWidget):
             self.saveNote[i].clicked.connect(self.saveBNote)
             buttonLayout.addWidget(self.saveNote[i])
             
-            groupLayout.addLayout(buttonLayout)
+            behaviourLayout.addLayout(buttonLayout)
+            
+            comboLayout.addLayout(behaviourLayout)
             
             self.top_layout.addWidget(groupBox)
         
         self.top_widget.setLayout(self.top_layout)
         self.scrollArea.setWidget(self.top_widget)
-        self.grid.addLayout(self.classLayout, 1, 5, 28, 23)
+        self.grid.addLayout(self.classLayout, 2, 2, 30, 30, Qt.AlignCenter)
+        
         
     def msgBox(self):
         sender = self.sender()
@@ -393,14 +441,7 @@ class ClassroomManager(QWidget):
         stuNote.setWindowModality(Qt.ApplicationModal)
         stuNote.exec_()
         
-        
-    def stuTasksDialog(self):
-        #get classId
-        classId = db.getClassId(self.className)
-        
-        
          
-        
     def saveBNote(self):
         sender = self.sender()
         for i in range(0, self.classSize):
@@ -421,10 +462,7 @@ class ClassroomManager(QWidget):
             stuName = stuNames[noteNum]
             self.updateNote(stuName)
 
-        
-        
-
-        
+            
     def updateNote(self, name):
         self.getScId(name)
         #insert note into database
@@ -432,26 +470,20 @@ class ClassroomManager(QWidget):
         
     def getScId(self, name):
         cId = db.getClassId(self.className)
-        #gets classId out of tuple using ci (classIndex)
-        for ci in cId:
-            cId = ci[0]
          
         #get student first and last name to get studentId  
         firstLast = name.split()
         first = firstLast[0]
         last = firstLast[1]
-        sId = db.getStudentId(first, last)
+        print(first, last)
         
-        #gets studentId out of tuple using si (studentIndex)
-        for si in sId:
-            sId = si[0]
+        sId = db.getStudentId(first, last)
     
+        print(sId, cId)
         scId = db.getStudentClassId(sId, cId)
-        #gets studentClassId out of tuple using sci (studentClassIndex)
-        for sci in scId:
-            scId = sci[0]
         self.scId = scId
-               
+                    
+
 
 def main():
     appGui = QApplication(sys.argv)
