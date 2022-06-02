@@ -1,4 +1,3 @@
-from pydoc import classname
 import dbconnect as db
 import sys 
 from PyQt5 import QtGui
@@ -387,10 +386,11 @@ class ClassroomManager(QWidget):
         self.getScId(name)
         studentNote = db.getNote(self.scId)
         stuNote = QDialog()
+        stuNoteLabel = QLabel(f"{name}'s Notes:\n{studentNote}", stuNote)
+        stuNoteLabel.move(20, 20)
         stuNote.resize(1000, 400)
         stuNote.setWindowTitle(f"{name}'s Notes")
         stuNote.setWindowModality(Qt.ApplicationModal)
-        stuNoteLabel = QLabel(f"{name}\n{studentNote}", stuNote)
         stuNote.exec_()
         
         
@@ -413,15 +413,15 @@ class ClassroomManager(QWidget):
             noNote.setIcon(QMessageBox.Warning)
             noNote.setText("Please write a behaviour note before saving")
             noNote.setStandardButtons(QMessageBox.Ok)
-            noNote.exec_()
-            
+            noNote.exec_()  
         else:
-            self.studentNote = (f"'{self.behaviourNote[noteNum].toPlainText()}'")
+            self.studentNote = (f"{self.behaviourNote[noteNum].toPlainText()}")
             self.behaviourNote[noteNum].clear()
+            stuNames = db.getStudents(self.className)
+            stuName = stuNames[noteNum]
+            self.updateNote(stuName)
 
-        stuNames = db.getStudents(self.className)
-        stuName = stuNames[noteNum]
-        self.updateNote(stuName)
+        
         
 
         

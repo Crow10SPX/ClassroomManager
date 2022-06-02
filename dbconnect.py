@@ -6,7 +6,7 @@ def checkUser(teacherUsername):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     # get passed in username and check it against db to check whether they are a valid user
-    sql = f"SELECT username FROM Teacher WHERE Teacher.username= '{teacherUsername}'"
+    sql = (f"SELECT username FROM Teacher WHERE Teacher.username= ?", [teacherUsername])
     c.execute(sql)
     name = c.fetchall()
     if len(name)>0:
@@ -19,7 +19,7 @@ def requestPassword(teacherUsername):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     # get password from db that matches passed in username
-    sql = f"SELECT password FROM Teacher WHERE Teacher.username= '{teacherUsername}'"
+    sql = (f"SELECT password FROM Teacher WHERE Teacher.username= ?", [teacherUsername])
     c.execute(sql)
     password = c.fetchall()[0][0]
     return password
@@ -109,20 +109,25 @@ def getStudentClassId(studentId, classId):
     return scId
 
 def insertNote(studentNote, studentClassId):
+    print(studentNote, studentClassId)
     conn = sqlite3.connect(database)
     c = conn.cursor()
-    sql1 = f"SELECT sc.behaviourNote FROM studentClass as sc WHERE sc.studentClassId ='{studentClassId}'"
-    c.execute(sql1)
-    row = c.fetchone()
-    existingNote = row[0]
-    if not existingNote:
-        finalNote = f"'{studentNote}'"
+    print(type(studentClassId))
+    c.execute("SELECT sc.behaviourNote FROM studentClass as sc WHERE sc.studentClassId = ?", [studentClassId])
+    # sql1 = f"SELECT sc.behaviourNote FROM studentClass as sc WHERE sc.studentClassId ='{studentClassId}'"
+    # c.execute(sql1)
+    existingNote = c.fetchall()
+    for i in existingNote:
+        existingNote = i[0] 
+    print(existingNote)
+    if existingNote == None:
+        finalNote = f"{studentNote}"
     else:
-        finalNote = f"'{existingNote}\n{studentNote}'"
+        finalNote = f"{existingNote}\n{studentNote}"
     print(finalNote)
-      
-    sql2 = ("UPDATE studentClass SET behaviourNote ='{}' WHERE studentClass.studentClassId ='{}'".format(finalNote, studentClassId))
-    c.execute(sql2)
+    c.execute("UPDATE studentClass SET behaviourNote = ? WHERE studentClass.studentClassId = ?", [finalNote, studentClassId])
+    # sql2 = ("UPDATE studentClass SET behaviourNote = '{}' WHERE studentClass.studentClassId = '{}'".format(finalNote, studentClassId))
+    # c.execute(sql2)
     conn.commit()
     conn.close()
 
@@ -134,8 +139,6 @@ def getNote(studentClassId):
     noteTuple = c.fetchall()
     for i in noteTuple:
         note = i[0]
-    note = str(note)
-    note = note.replace("'","")
     return note
 
         
