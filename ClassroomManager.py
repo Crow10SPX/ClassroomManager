@@ -444,7 +444,7 @@ def main():
     rect = screen.availableGeometry()
     print('Available: %d x %d' % (rect.width(), rect.height()))
     cm.setFixedSize(1920, 1040)
-    cm.show()
+    cm.showMaximized()
     sys.exit(appGui.exec_()) 
     
     
