@@ -216,8 +216,8 @@ class ClassroomManager(QWidget):
         # put UI elements on timetable page
         self.grid.addWidget(self.teacherProfileLabel, 0, 1, 1, 35)        
         self.grid.addWidget(self.teacherTimetableLabel, 0, 14, 0, 35, Qt.AlignCenter)
-        self.grid.addWidget(self.classLabel, 2, 5, 3, 35)        
-        self.grid.addWidget(self.teacherLabel, 1, 3, 1, 35)
+        self.grid.addWidget(self.classLabel, 2, 5, 4, 35)        
+        self.grid.addWidget(self.teacherLabel, 2, 3, 1, 35)
         self.grid.addWidget(self.welcomeTeacherLabel, 0, 31)
         
         
@@ -348,7 +348,7 @@ class ClassroomManager(QWidget):
             self.behaviourLayout.addWidget(self.notePrompt)
                         
             self.behaviourNote[i] = QTextEdit()
-            self.behaviourNote[i].setFixedSize(850, 200)
+            self.behaviourNote[i].setFixedSize(780, 200)
             self.behaviourLayout.addWidget(self.behaviourNote[i])
 
             self.buttonLayout = QVBoxLayout()
@@ -412,8 +412,6 @@ class ClassroomManager(QWidget):
             noNote.exec_()  
         else:
             self.studentNote = (f"{self.behaviourNote[noteNum].toPlainText()}")
-            print(r'self.behaviourNote[noteNum].toPlainText()}');
-            #print(self.studentNote)
             self.behaviourNote[noteNum].clear()
             
         stuNames = db.getStudents(self.className)
@@ -450,7 +448,8 @@ def main():
     print('Size: %d x %d' % (size.width(), size.height()))
     rect = screen.availableGeometry()
     print('Available: %d x %d' % (rect.width(), rect.height()))
-    cm.showMaximized()
+    cm.setFixedSize(1920, 1080)
+    cm.show()
     sys.exit(appGui.exec_()) 
     
     
