@@ -245,7 +245,7 @@ class ClassroomManager(QWidget):
         for self.teacherClass in self.classDict["classList"]:
             self.classButton[u] = QPushButton(self.teacherClass["class"])
             self.classButton[u].setStyleSheet(self.styles["genButton"])
-            self.classButton[u].setFixedSize(250, 40)
+            self.classButton[u].setFixedSize(280, 40)
             self.classButton[u].clicked.connect(lambda:self.classPage(self.msgSender()))
             self.listLayout.addWidget(self.classButton[u])
             u+=1
