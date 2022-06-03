@@ -220,12 +220,7 @@ class ClassroomManager(QWidget):
         self.grid.addWidget(self.teacherLabel, 2, 3, 1, 35)
         self.grid.addWidget(self.welcomeTeacherLabel, 0, 31)
         
-        
-        #QGridLayout: Multi-cell fromRow greater than toRow
-        #QGridLayout: Multi-cell fromCol greater than toCol
-        #these two error messages pop up when the logout button is placed please ignore if the 3rd and 4th integers 
-        #are not 0, it shifts the timetable img to the left and the logout button is out of place
-        self.grid.addWidget(self.logoutButton, 30, 34, 0, 0)
+        self.grid.addWidget(self.logoutButton, 18, 0, 20, 0, Qt.AlignLeft)
                 
     def logout(self):
         self.deleteTimetablePage()
