@@ -307,6 +307,8 @@ class ClassroomManager(QWidget):
         self.top_layout.deleteLater()
         self.top_widget.deleteLater()
         
+        
+        
     
     def studentsBox(self):
         self.classLayout= QVBoxLayout()
@@ -327,25 +329,6 @@ class ClassroomManager(QWidget):
         self.top_layout.setAlignment(self.classSizeLabel, Qt.AlignHCenter)
         self.top_layout.setAlignment(self.thisClassLabel, Qt.AlignHCenter)
         
-        #make add/subtract assessment button
-        self. taskWidget = QWidget()
-        self.taskLayout = QHBoxLayout()
-        
-        self.addButton = QPushButton("Add")
-        self.addButton.setFixedSize(60, 60)
-        #self.addButton.clicked.connect()
-        self.addButton.setStyleSheet(self.styles["markButton"])
-        
-        
-        self.taskLayout.addWidget(self.addButton)
-        
-        
-        self.taskWidget.setLayout(self.taskLayout)
-        self.top_layout.addWidget(self.taskWidget)
-        
-        self.top_layout.setAlignment(self.taskWidget, Qt.AlignRight)
-        
-        
         self.viewNotes = [None]*self.classSize
         self.behaviourNote = [None]*self.classSize
         self.saveNote = [None]*self.classSize
@@ -360,41 +343,17 @@ class ClassroomManager(QWidget):
             
             groupBox.setTitle(f"Student: {self.students[i]}")
         
-            comboLayout = QVBoxLayout(groupBox)
-            
-            self.markLayout = QHBoxLayout()
-            
-            
-            for x in range(0, 4):
-                self.markvlayout[i][x] = QVBoxLayout()
-                self.markLabel[i][x] = QLabel()
-                self.markLabel[i][x].setText(f"Task: {x+1}")
-                self.mark[i][x] = QLineEdit()
-                self.mark[i][x].setFixedSize(60,40)
-                saveMark = QPushButton("Save Marks")
-                self.markvlayout[i][x].addWidget(self.markLabel[i][x])
-                self.markvlayout[i][x].addWidget(self.mark[i][x])
-                self.markvlayout[i][x].addItem(self.spacer4)
-                self.markLayout.addLayout(self.markvlayout[i][x])
-                self.markLayout.addItem(self.spacer1)
-             
-            saveMark = QPushButton("Save Marks")   
-            self.markLayout.addWidget(saveMark)
-            self.markLayout.setAlignment(saveMark, Qt.AlignRight)
-            self.markLayout.setAlignment(self.markvlayout[i][x], Qt.AlignLeft)      
-            comboLayout.addLayout(self.markLayout)
-            
-            behaviourLayout = QHBoxLayout()
+            self.behaviourLayout = QHBoxLayout(groupBox)
 
-            notePrompt = QLabel("Write a behaviour note:")
-            notePrompt.setStyleSheet("color: black; font: 25px;")
-            behaviourLayout.addWidget(notePrompt)
+            self.notePrompt = QLabel("Write a behaviour note:")
+            self.notePrompt.setStyleSheet("color: black; font: 25px;")
+            self.behaviourLayout.addWidget(self.notePrompt)
                         
             self.behaviourNote[i] = QTextEdit()
             self.behaviourNote[i].setFixedSize(1100, 200)
-            behaviourLayout.addWidget(self.behaviourNote[i])
+            self.behaviourLayout.addWidget(self.behaviourNote[i])
 
-            buttonLayout = QVBoxLayout()
+            self.buttonLayout = QVBoxLayout()
             
             self.viewNotes[i] = QPushButton(groupBox)
             # get first name of students
@@ -403,26 +362,24 @@ class ClassroomManager(QWidget):
             self.viewNotes[i].setStyleSheet(self.styles["noteButton"])
             self.viewNotes[i].setFixedSize(240, 70)
             self.viewNotes[i].clicked.connect(self.msgBox)
-            buttonLayout.addWidget(self.viewNotes[i])
+            self.buttonLayout.addWidget(self.viewNotes[i])
             
             self.saveNote[i] = QPushButton(groupBox)
             self.saveNote[i].setText(f"Save Note")
             self.saveNote[i].setStyleSheet(self.styles["noteButton"])
             self.saveNote[i].setFixedSize(240, 70)
             self.saveNote[i].clicked.connect(self.saveBNote)
-            buttonLayout.addWidget(self.saveNote[i])
+            self.buttonLayout.addWidget(self.saveNote[i])
             
-            behaviourLayout.addLayout(buttonLayout)
-            
-            comboLayout.addLayout(behaviourLayout)
-            
+            self.behaviourLayout.addLayout(self.buttonLayout)
+                      
             self.top_layout.addWidget(groupBox)
         
         self.top_widget.setLayout(self.top_layout)
         self.scrollArea.setWidget(self.top_widget)
         self.grid.addLayout(self.classLayout, 2, 2, 30, 30, Qt.AlignCenter)
         
-        
+    
     def msgBox(self):
         sender = self.sender()
         for i in range(0, self.classSize):
@@ -457,10 +414,13 @@ class ClassroomManager(QWidget):
             noNote.exec_()  
         else:
             self.studentNote = (f"{self.behaviourNote[noteNum].toPlainText()}")
+            print(r'self.behaviourNote[noteNum].toPlainText()}');
+            #print(self.studentNote)
             self.behaviourNote[noteNum].clear()
-            stuNames = db.getStudents(self.className)
-            stuName = stuNames[noteNum]
-            self.updateNote(stuName)
+            
+        stuNames = db.getStudents(self.className)
+        stuName = stuNames[noteNum]
+        self.updateNote(stuName)
 
             
     def updateNote(self, name):
@@ -475,11 +435,9 @@ class ClassroomManager(QWidget):
         firstLast = name.split()
         first = firstLast[0]
         last = firstLast[1]
-        print(first, last)
         
         sId = db.getStudentId(first, last)
     
-        print(sId, cId)
         scId = db.getStudentClassId(sId, cId)
         self.scId = scId
                     

@@ -87,31 +87,29 @@ def getStudentId(firstName, lastName):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     c.execute(f"SELECT s.studentId FROM Student as s WHERE s.firstName = ? AND s.lastName = ?", [firstName, lastName])
-    sId = c.fetchone()
+    sId = c.fetchone()[0]
     return sId
 
 def getStudentClassId(studentId, classId):
     conn = sqlite3.connect(database)
     c = conn.cursor()
     c.execute(f"SELECT sc.studentClassId FROM studentClass as sc WHERE sc.studentId = ? AND sc.classId = ?", [studentId, classId])
-    scId = c.fetchone()[0]
+    scId = c.fetchall()[0][0]
     return scId
 
 def insertNote(studentNote, studentClassId):
     print(studentNote, studentClassId)
     conn = sqlite3.connect(database)
     c = conn.cursor()
-    print(type(studentClassId))
     c.execute("SELECT sc.behaviourNote FROM studentClass as sc WHERE sc.studentClassId = ?", [studentClassId])
     existingNote = c.fetchall()
     for i in existingNote:
         existingNote = i[0] 
-    print(existingNote)
     if existingNote == None:
         finalNote = f"{studentNote}"
     else:
         finalNote = f"{existingNote}\n{studentNote}"
-    print(finalNote)
+    finalNote = finalNote.strip()
     c.execute("UPDATE studentClass SET behaviourNote = ? WHERE studentClass.studentClassId = ?", [finalNote, studentClassId])
     conn.commit()
     conn.close()
