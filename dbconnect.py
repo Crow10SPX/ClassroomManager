@@ -98,7 +98,6 @@ def getStudentClassId(studentId, classId):
     return scId
 
 def insertNote(studentNote, studentClassId):
-    print(studentNote, studentClassId)
     conn = sqlite3.connect(database)
     c = conn.cursor()
     c.execute("SELECT sc.behaviourNote FROM studentClass as sc WHERE sc.studentClassId = ?", [studentClassId])
