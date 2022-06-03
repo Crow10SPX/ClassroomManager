@@ -15,20 +15,20 @@ class ClassroomManager(QWidget):
         "titleText":
             "color: black; font: 18px;",
         "noteButton":
-            "QPushButton{background-color : rgb(0, 128, 255); color : white; font : bold 28px; font-family : Arial;"
+            "QPushButton{background-color : rgb(0, 128, 255); color : white; font : bold 20px; font-family : Arial;"
             "border-style : outset; border-width : 2px; border-radius: 10px; min-width: 10em; padding: 6px; border-color : rgb(0, 128, 255);} QPushButton::hover { background-color : rgb(0, 221, 255);"
             "border-color : rgb(0, 221, 255); color : white;} QPushButton::pressed {color : rgb(0, 221, 255);}",
         "welcomeText":
-            "color : black; font : 54px; font-family : Arial;",
+            "color : black; font : 34px; font-family : Arial;",
         "classText":
-            "color : black; font : 36px; font-family : Arial;",
+            "color : black; font : 26px; font-family : Arial;",
         "genEntry":
             "background-color: white;",
         "genText":
             "color : black; font : 24px; font-family : Arial;",
         "genButton":
-            "QPushButton{background-color : rgb(0, 128, 255); color : white; font : bold 30px; font-family : Arial;"
-            "border-style : outset; border-width : 2px; border-radius: 10px; min-width: 10em; padding: 6px; border-color : rgb(0, 128, 255);} QPushButton::hover { background-color : rgb(0, 221, 255);"
+            "QPushButton{background-color : rgb(0, 128, 255); color : white; font : bold 20px; font-family : Arial;"
+            "border-style : outset; border-width : 2px; border-radius: 10px; padding: 6px; border-color : rgb(0, 128, 255);} QPushButton::hover { background-color : rgb(0, 221, 255);"
             "border-color : rgb(0, 221, 255); color : white;} QPushButton::pressed {color : rgb(0, 221, 255);}",
         "navbar":
             "QTabBar{color : black; font : bold 60px; font-family : Arial;}"
@@ -59,8 +59,8 @@ class ClassroomManager(QWidget):
     def loginPage(self):
         # create main title logo
         self.classManagerLabel = QLabel(self)
-        self.classManagerLabel.setFixedHeight(600)
-        self.classManagerLabel.setFixedWidth(1400)
+        self.classManagerLabel.setFixedHeight(300)
+        self.classManagerLabel.setFixedWidth(800)
         self.classManagerLabel.setScaledContents(True)
         self.classManagerLogo = QPixmap("img/logo.png")
         self.classManagerLabel.setPixmap(self.classManagerLogo)
@@ -94,16 +94,16 @@ class ClassroomManager(QWidget):
         self.spacer2 = QSpacerItem(150, 150, QSizePolicy.Expanding)
         self.spacer3 = QSpacerItem(150, 150, QSizePolicy.Expanding)
         
-        # place all UI elements on the page
+        # place all UI elements on the page 
         self.grid.addItem(self.spacer3, 0, 0, 1, 35, Qt.AlignCenter)
         self.grid.addWidget(self.classManagerLabel, 1, 0, 1, 35, Qt.AlignCenter)
         self.grid.addItem(self.spacer2, 2, 0, 1, 35, Qt.AlignCenter)
         self.grid.addItem(self.spacer1, 3, 0, Qt.AlignTop)
-        self.grid.addWidget(self.usernameTitle, 4, 15, 1, 5, Qt.AlignLeft)
-        self.grid.addWidget(self.usernameEntry, 5, 15, 1, 5, Qt.AlignTop)
-        self.grid.addWidget(self.passwordTitle, 6, 15, 1, 5, Qt.AlignLeft)
-        self.grid.addWidget(self.passwordEntry, 7, 15, 1, 5, Qt.AlignTop)
-        self.grid.addWidget(self.loginButton, 8, 15, 1, 5, Qt.AlignTop)
+        self.grid.addWidget(self.usernameTitle, 4, 14, 1, 5, Qt.AlignLeft)
+        self.grid.addWidget(self.usernameEntry, 5, 14, 1, 5, Qt.AlignTop)
+        self.grid.addWidget(self.passwordTitle, 6, 14, 1, 5, Qt.AlignLeft)
+        self.grid.addWidget(self.passwordEntry, 7, 14, 1, 5, Qt.AlignTop)
+        self.grid.addWidget(self.loginButton, 8, 14, 1, 5, Qt.AlignTop)
         
     def deleteLoginPage(self):
         # delete UI elements from the page
@@ -126,7 +126,7 @@ class ClassroomManager(QWidget):
             self.loginError = QLabel(self)
             self.loginError.setText(error)
             self.loginError.setStyleSheet(self.styles["error"])
-            self.grid.addWidget(self.loginError, 9, 15, 1, 5, Qt.AlignTop)
+            self.grid.addWidget(self.loginError, 9, 14, 1, 5, Qt.AlignTop)
         except:
             self.loginError = QLabel(self)
             self.loginError.setText(error)
@@ -173,8 +173,8 @@ class ClassroomManager(QWidget):
         # put teacher profile picture of page
         profilePath = db.getProfilePicture(self.loginU)
         self.teacherProfileLabel = QLabel(self)
-        self.teacherProfileLabel.setFixedHeight(600)
-        self.teacherProfileLabel.setFixedWidth(600)
+        self.teacherProfileLabel.setFixedHeight(400)
+        self.teacherProfileLabel.setFixedWidth(400)
         self.teacherProfileLabel.setScaledContents(True)
         teacherPicture = QPixmap(profilePath)
         self.teacherProfileLabel.setPixmap(teacherPicture)
@@ -182,8 +182,8 @@ class ClassroomManager(QWidget):
         # get teacher timetable picture
         timetablePath = db.getTimtetable(self.loginU)
         self.teacherTimetableLabel = QLabel(self)
-        self.teacherTimetableLabel.setFixedHeight(800)
-        self.teacherTimetableLabel.setFixedWidth(1400)
+        self.teacherTimetableLabel.setFixedHeight(500)
+        self.teacherTimetableLabel.setFixedWidth(1000)
         self.teacherTimetableLabel.setScaledContents(True)
         teacherTimetable = QPixmap(timetablePath)
         self.teacherTimetableLabel.setPixmap(teacherTimetable)
@@ -206,7 +206,7 @@ class ClassroomManager(QWidget):
 
         # make logout button
         self.logoutButton = QPushButton("Logout")
-        self.logoutButton.setFixedSize(420, 60)
+        self.logoutButton.setFixedSize(250, 40)
         self.logoutButton.clicked.connect(self.logout)
         self.logoutButton.setStyleSheet(self.styles["genButton"])
 
@@ -216,8 +216,8 @@ class ClassroomManager(QWidget):
         # put UI elements on timetable page
         self.grid.addWidget(self.teacherProfileLabel, 0, 1, 1, 35)        
         self.grid.addWidget(self.teacherTimetableLabel, 0, 14, 0, 35, Qt.AlignCenter)
-        self.grid.addWidget(self.classLabel, 3, 5, 1, 35)        
-        self.grid.addWidget(self.teacherLabel, 2, 3, 1, 35)
+        self.grid.addWidget(self.classLabel, 2, 5, 3, 35)        
+        self.grid.addWidget(self.teacherLabel, 1, 3, 1, 35)
         self.grid.addWidget(self.welcomeTeacherLabel, 0, 31)
         
         
@@ -237,7 +237,7 @@ class ClassroomManager(QWidget):
         # create a vertical sublayout for the buttons
         self.listLayout = QVBoxLayout()
         # position new sublayout on the screen
-        self.grid.addLayout(self.listLayout, 4, 3, 8, 35)
+        self.grid.addLayout(self.listLayout, 4, 4, 8, 6)
         self.setLayout(self.grid)
         classList = []
         # make the button equal to the maximum amount of buttons created relating to the amount of classes for that teacher
@@ -250,7 +250,7 @@ class ClassroomManager(QWidget):
         for self.teacherClass in self.classDict["classList"]:
             self.classButton[u] = QPushButton(self.teacherClass["class"])
             self.classButton[u].setStyleSheet(self.styles["genButton"])
-            self.classButton[u].setFixedSize(420, 60)
+            self.classButton[u].setFixedSize(250, 40)
             self.classButton[u].clicked.connect(lambda:self.classPage(self.msgSender()))
             self.listLayout.addWidget(self.classButton[u])
             u+=1
@@ -289,7 +289,7 @@ class ClassroomManager(QWidget):
         self.studentsBox()
         
         self.backButton = QPushButton("Go Back")
-        self.backButton.setFixedSize(420, 60)
+        self.backButton.setFixedSize(250, 40)
         self.backButton.clicked.connect(lambda:self.goTimetable())
         self.backButton.setStyleSheet(self.styles["genButton"])
         self.grid.addWidget(self.backButton, 34, 0)
@@ -308,8 +308,6 @@ class ClassroomManager(QWidget):
         self.top_widget.deleteLater()
         
         
-        
-    
     def studentsBox(self):
         self.classLayout= QVBoxLayout()
         # create a scroll area
@@ -346,11 +344,11 @@ class ClassroomManager(QWidget):
             self.behaviourLayout = QHBoxLayout(groupBox)
 
             self.notePrompt = QLabel("Write a behaviour note:")
-            self.notePrompt.setStyleSheet("color: black; font: 25px;")
+            self.notePrompt.setStyleSheet("color: black; font: 22px;")
             self.behaviourLayout.addWidget(self.notePrompt)
                         
             self.behaviourNote[i] = QTextEdit()
-            self.behaviourNote[i].setFixedSize(1100, 200)
+            self.behaviourNote[i].setFixedSize(850, 200)
             self.behaviourLayout.addWidget(self.behaviourNote[i])
 
             self.buttonLayout = QVBoxLayout()
@@ -360,14 +358,14 @@ class ClassroomManager(QWidget):
             firstName = self.students[i].split()[0]
             self.viewNotes[i].setText(f"{firstName}'s Notes")
             self.viewNotes[i].setStyleSheet(self.styles["noteButton"])
-            self.viewNotes[i].setFixedSize(240, 70)
+            self.viewNotes[i].setFixedSize(200, 40)
             self.viewNotes[i].clicked.connect(self.msgBox)
             self.buttonLayout.addWidget(self.viewNotes[i])
             
             self.saveNote[i] = QPushButton(groupBox)
             self.saveNote[i].setText(f"Save Note")
             self.saveNote[i].setStyleSheet(self.styles["noteButton"])
-            self.saveNote[i].setFixedSize(240, 70)
+            self.saveNote[i].setFixedSize(200, 40)
             self.saveNote[i].clicked.connect(self.saveBNote)
             self.buttonLayout.addWidget(self.saveNote[i])
             
@@ -377,7 +375,7 @@ class ClassroomManager(QWidget):
         
         self.top_widget.setLayout(self.top_layout)
         self.scrollArea.setWidget(self.top_widget)
-        self.grid.addLayout(self.classLayout, 2, 2, 30, 30, Qt.AlignCenter)
+        self.grid.addLayout(self.classLayout, 1, 1, 30, 30, Qt.AlignCenter)
         
     
     def msgBox(self):
@@ -446,8 +444,15 @@ class ClassroomManager(QWidget):
 def main():
     appGui = QApplication(sys.argv)
     cm = ClassroomManager()
+    screen = appGui.primaryScreen()
+    print('Screen: %s' % screen.name())
+    size = screen.size()
+    print('Size: %d x %d' % (size.width(), size.height()))
+    rect = screen.availableGeometry()
+    print('Available: %d x %d' % (rect.width(), rect.height()))
     cm.showMaximized()
-    sys.exit(appGui.exec_())   
+    sys.exit(appGui.exec_()) 
+    
     
 if __name__ == '__main__':
     main()
