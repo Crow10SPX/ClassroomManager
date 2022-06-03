@@ -214,10 +214,10 @@ class ClassroomManager(QWidget):
         self.makeClassButtons()
         
         # put UI elements on timetable page
-        self.grid.addWidget(self.teacherProfileLabel, 0, 1, 1, 35)        
+        self.grid.addWidget(self.teacherProfileLabel, 0, 0, 1, 35)        
         self.grid.addWidget(self.teacherTimetableLabel, 0, 14, 0, 35, Qt.AlignCenter)
-        self.grid.addWidget(self.classLabel, 2, 5, 4, 35)        
-        self.grid.addWidget(self.teacherLabel, 2, 3, 1, 35)
+        self.grid.addWidget(self.classLabel, 1, 1, 4, 3)        
+        self.grid.addWidget(self.teacherLabel, 2, 1, 1, 35)
         self.grid.addWidget(self.welcomeTeacherLabel, 0, 31)
         
         self.grid.addWidget(self.logoutButton, 18, 0, 20, 0, Qt.AlignLeft)
@@ -232,7 +232,7 @@ class ClassroomManager(QWidget):
         # create a vertical sublayout for the buttons
         self.listLayout = QVBoxLayout()
         # position new sublayout on the screen
-        self.grid.addLayout(self.listLayout, 4, 4, 8, 6)
+        self.grid.addLayout(self.listLayout, 3, 1, 4, 6)
         self.setLayout(self.grid)
         classList = []
         # make the button equal to the maximum amount of buttons created relating to the amount of classes for that teacher
@@ -443,7 +443,7 @@ def main():
     print('Size: %d x %d' % (size.width(), size.height()))
     rect = screen.availableGeometry()
     print('Available: %d x %d' % (rect.width(), rect.height()))
-    cm.setFixedSize(1920, 1080)
+    cm.setFixedSize(1920, 1040)
     cm.show()
     sys.exit(appGui.exec_()) 
     
